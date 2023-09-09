@@ -46,7 +46,7 @@ const calculateExercises = (
     case 2:
       ratingDescription = "not too bad but could be better";
       break;
-    case 3:
+    default:
       ratingDescription = "brilliant, keep it going";
       break;
   }
