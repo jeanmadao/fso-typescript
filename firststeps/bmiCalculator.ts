@@ -1,22 +1,22 @@
-interface bmiValues {
+export interface bmiValues {
   height: number;
   weight: number;
 }
 
-const parseBmiArguments = (args: string[]): bmiValues => {
-  if (args.length < 4) throw new Error("Not enough arguments");
-  if (args.length > 4) throw new Error("Too many arguments");
+type ReqQuery = { height?: string; weight?: string };
 
-  const height = Number(args[2]);
-  const weight = Number(args[3]);
+export const parseBmiArguments = (query: ReqQuery): bmiValues => {
+  if (!query.height || !query.weight) throw new Error("Not enough arguments");
 
-  if (isNaN(height) || isNaN(weight))
+  const heightInt = Number(query.height);
+  const weightInt = Number(query.weight);
+  if (isNaN(Number(heightInt)) || isNaN(Number(weightInt)))
     throw new Error("Provided values must be numbers!");
 
-  if (height <= 0 || weight <= 0)
+  if (heightInt <= 0 || weightInt <= 0)
     throw new Error("Provided value must be absolutely positive");
 
-  return { height, weight };
+  return { height: heightInt, weight: weightInt };
 };
 
 const calculateBmi = (height: number, weight: number): string => {
@@ -40,13 +40,15 @@ const calculateBmi = (height: number, weight: number): string => {
   }
 };
 
-try {
-  const { height, weight } = parseBmiArguments(process.argv);
-  console.log(calculateBmi(height, weight));
-} catch (error: unknown) {
-  let errorMessage = "Something went wrong: ";
-  if (error instanceof Error) {
-    errorMessage += error.message;
-  }
-  console.log(errorMessage);
-}
+// try {
+//   const { height, weight } = parseBmiArguments(process.argv);
+//   console.log(calculateBmi(height, weight));
+// } catch (error: unknown) {
+//   let errorMessage = "Something went wrong: ";
+//   if (error instanceof Error) {
+//     errorMessage += error.message;
+//   }
+//   console.log(errorMessage);
+// }
+//
+export default calculateBmi;
