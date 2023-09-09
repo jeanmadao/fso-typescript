@@ -1,0 +1,11 @@
+{
+  "name": "firststeps",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "ts-node": "ts-node",
+    "calculateBmi": "ts-node bmiCalculator.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
