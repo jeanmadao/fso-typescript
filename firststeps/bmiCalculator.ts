@@ -3,20 +3,17 @@ export interface bmiValues {
   weight: number;
 }
 
-type ReqQuery = { height?: string; weight?: string };
+export const parseBmiArguments = (
+  height: number,
+  weight: number
+): bmiValues => {
+  if (isNaN(Number(height)) || isNaN(Number(weight)))
+    throw new Error("Must provide two numbers for height and weight");
 
-export const parseBmiArguments = (query: ReqQuery): bmiValues => {
-  if (!query.height || !query.weight) throw new Error("Not enough arguments");
-
-  const heightInt = Number(query.height);
-  const weightInt = Number(query.weight);
-  if (isNaN(Number(heightInt)) || isNaN(Number(weightInt)))
-    throw new Error("Provided values must be numbers!");
-
-  if (heightInt <= 0 || weightInt <= 0)
+  if (height <= 0 || weight <= 0)
     throw new Error("Provided value must be absolutely positive");
 
-  return { height: heightInt, weight: weightInt };
+  return { height, weight };
 };
 
 const calculateBmi = (height: number, weight: number): string => {

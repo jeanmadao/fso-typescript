@@ -8,7 +8,10 @@ app.get("/hello", (_req, res) => {
 
 app.get("/bmi", (req, res) => {
   try {
-    const { height, weight } = parseBmiArguments(req.query);
+    const { height, weight } = parseBmiArguments(
+      Number(req.query.height),
+      Number(req.query.weight)
+    );
     res.json({ height, weight, bmi: calculateBmi(height, weight) });
   } catch (error: unknown) {
     let errorMessage = "Something went wrong: ";
