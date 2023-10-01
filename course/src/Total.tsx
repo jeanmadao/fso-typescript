@@ -1,10 +1,7 @@
-interface CourseParts {
-  name: string;
-  exerciseCount: number;
-}
+import { CoursePart } from "./App";
 
 interface TotalProps {
-  content: CourseParts[];
+  content: CoursePart[];
 }
 
 const Total = (props: TotalProps) => {
