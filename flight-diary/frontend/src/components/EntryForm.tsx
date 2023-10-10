@@ -1,13 +1,19 @@
 import { useState } from "react";
 import entryService from "../services/entries";
 import { DiaryEntry, NewDiaryEntry, Visibility, Weather } from "../types";
+import axios from "axios";
 
 interface EntryFormProps {
   diaryEntries: DiaryEntry[];
   setDiaryEntries: React.Dispatch<React.SetStateAction<DiaryEntry[]>>;
+  setNotification: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const EntryForm = ({ diaryEntries, setDiaryEntries }: EntryFormProps) => {
+const EntryForm = ({
+  diaryEntries,
+  setDiaryEntries,
+  setNotification,
+}: EntryFormProps) => {
   const [date, setDate] = useState("");
   const [visibility, setVisibility] = useState("");
   const [weather, setWeather] = useState("");
@@ -22,8 +28,14 @@ const EntryForm = ({ diaryEntries, setDiaryEntries }: EntryFormProps) => {
       weather: weather as Weather,
       comment,
     };
-    const newEntry = await entryService.postEntry(newDiaryEntry);
-    setDiaryEntries(diaryEntries.concat(newEntry));
+    try {
+      const newEntry = await entryService.postEntry(newDiaryEntry);
+      setDiaryEntries(diaryEntries.concat(newEntry));
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setNotification(error.response!.data);
+      }
+    }
   };
 
   return (
