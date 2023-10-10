@@ -45,23 +45,34 @@ const EntryForm = ({
         <div>
           <label>date</label>
           <input
+            type="date"
             value={date}
             onChange={({ target }) => setDate(target.value)}
           />
         </div>
         <div>
-          <label>visibility</label>
-          <input
-            value={visibility}
-            onChange={({ target }) => setVisibility(target.value)}
-          />
+          <label>visibility </label>
+          <label>great</label>
+          <input type="radio" onChange={() => setVisibility("great")} />
+          <label>good</label>
+          <input type="radio" onChange={() => setVisibility("good")} />
+          <label>ok</label>
+          <input type="radio" onChange={() => setVisibility("ok")} />
+          <label>poor</label>
+          <input type="radio" onChange={() => setVisibility("poor")} />
         </div>
         <div>
-          <label>weather</label>
-          <input
-            value={weather}
-            onChange={({ target }) => setWeather(target.value)}
-          />
+          <label>weather </label>
+          <label>sunny</label>
+          <input type="radio" onChange={() => setWeather("sunny")} />
+          <label>rainy</label>
+          <input type="radio" onChange={() => setWeather("rainy")} />
+          <label>cloudy</label>
+          <input type="radio" onChange={() => setWeather("cloudy")} />
+          <label>stormy</label>
+          <input type="radio" onChange={() => setWeather("stormy")} />
+          <label>windy</label>
+          <input type="radio" onChange={() => setWeather("windy")} />
         </div>
         <div>
           <label>comment</label>
