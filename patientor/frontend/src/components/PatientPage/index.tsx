@@ -1,11 +1,12 @@
 import { Male, Female, QuestionMark } from "@mui/icons-material";
 import { SvgIcon } from "@mui/material";
-import { Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 
 interface Props {
   patient: Patient | null;
+  diagnoses: Diagnosis[];
 }
-const PatientPage = ({ patient }: Props) => {
+const PatientPage = ({ patient, diagnoses }: Props) => {
   if (!patient) return <h2>Patient not found</h2>;
   console.log(patient);
   let genre;
@@ -39,7 +40,14 @@ const PatientPage = ({ patient }: Props) => {
           </div>
           <ul>
             {entry.diagnosisCodes?.map((diagnosisCode) => (
-              <li key={entry.id + diagnosisCode}>{diagnosisCode}</li>
+              <li key={entry.id + diagnosisCode}>
+                {diagnosisCode}{" "}
+                {
+                  diagnoses.find(
+                    (diagnosis) => diagnosis.code === diagnosisCode
+                  )?.name
+                }
+              </li>
             ))}
           </ul>
         </div>
