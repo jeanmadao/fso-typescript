@@ -1,4 +1,4 @@
-import { Gender, NewPatient } from "./types";
+import { EntryWithoutId, Gender, NewPatient } from "./types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -75,4 +75,22 @@ const toNewPatient = (body: unknown): NewPatient => {
   throw new Error("Incorrect data: a field is missing");
 };
 
-export default toNewPatient;
+const toNewEntry = (body: unknown): EntryWithoutId => {
+  if (!body || typeof body !== "object") {
+    throw new Error("Incorrect or missing data");
+  }
+
+  if (
+  "description" in body &&
+  "date" in body &&
+  "specialist" in body &&
+  ) {
+    const newEntry: EntryWithoutId = {
+
+    }
+  }
+
+
+};
+
+export default { toNewPatient, toNewEntry };
