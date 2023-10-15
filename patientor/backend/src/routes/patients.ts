@@ -1,7 +1,6 @@
 import express from "express";
 import patientService from "../services/patientService";
-import toNewPatient from "../utils";
-import { EntryWithoutId } from "../types";
+import utils from "../utils";
 
 const router = express.Router();
 
@@ -17,7 +16,7 @@ router.get("/:id", (req, res) => {
 
 router.post("/:id/entries", (req, res) => {
   try {
-    const newEntry = req.body as EntryWithoutId;
+    const newEntry = utils.toNewEntry(req.body);
     const returnedPatient = patientService.addEntry(req.params.id, newEntry);
     res.json(returnedPatient);
   } catch (error: unknown) {
@@ -31,7 +30,7 @@ router.post("/:id/entries", (req, res) => {
 
 router.post("/", (req, res) => {
   try {
-    const newPatient = toNewPatient(req.body);
+    const newPatient = utils.toNewPatient(req.body);
     const addedPatient = patientService.addPatient(newPatient);
     res.json(addedPatient);
   } catch (error: unknown) {

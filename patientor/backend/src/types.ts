@@ -32,7 +32,7 @@ interface HealthCheckEntry extends BaseEntry {
   healthCheckRating: HealthCheckRating;
 }
 
-interface Discharge {
+export interface Discharge {
   date: Date;
   criteria: string;
 }
@@ -42,7 +42,7 @@ interface HostpitalEntry extends BaseEntry {
   discharge: Discharge;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: Date;
   endDate: Date;
 }
