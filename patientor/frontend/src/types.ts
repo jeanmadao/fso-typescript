@@ -10,7 +10,7 @@ export enum Gender {
   Other = "other",
 }
 
-type Date = string;
+export type Date = string;
 
 interface BaseEntry {
   id: string;
@@ -74,3 +74,8 @@ export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;
 
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+// Define Entry without the 'id' property
+export type EntryWithoutId = UnionOmit<Entry, "id">;

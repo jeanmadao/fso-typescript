@@ -12,8 +12,11 @@ const parseName = (name: unknown): string => {
   if (!isString(name)) {
     throw new Error("Incorrect name");
   }
+  if (name.length === 0)
+    throw new Error("Empty name");
   return name;
 };
+
 
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
@@ -55,9 +58,38 @@ const parseOccupation = (occupation: unknown): string => {
 
 const parseDescription = (description: unknown): string => {
   if (!isString(description)) {
-    throw new Error("Incorrect description: " + description);
+    throw new Error("Description is not a string");
   }
+  if (description.length === 0)
+    throw new Error("Empty description");
   return description;
+};
+
+const parseSpecialist = (specialist: unknown): string => {
+  if (!isString(specialist)) {
+    throw new Error("Specialist name is not a string");
+  }
+  if (specialist.length === 0)
+    throw new Error("Empty specialist name");
+  return specialist;
+};
+
+const parseEmployerName = (employerName: unknown): string => {
+  if (!isString(employerName)) {
+    throw new Error("Employer name is not a string");
+  }
+  if (employerName.length === 0)
+    throw new Error("Empty employer name");
+  return employerName;
+};
+
+const parseCriteria = (criteria: unknown): string => {
+  if (!isString(criteria)) {
+    throw new Error("criteria is not a string");
+  }
+  if (criteria.length === 0)
+    throw new Error("Empty criteria");
+  return criteria;
 };
 
 const isHealthCheckRating = (healthCheckRating: number): healthCheckRating is HealthCheckRating => {
@@ -84,23 +116,33 @@ const parseDischarge = (discharge: unknown): Discharge => {
   }
   return {
     date: parseDate(discharge.date),
-    criteria: discharge.criteria
+    criteria: parseCriteria(discharge.criteria)
   };
 };
 
-const parseSickLeave = (sickLeave: unknown): SickLeave => {
+const parseSickLeave = (sickLeave: unknown): SickLeave | undefined => {
+  if (!sickLeave)
+    return undefined;
+  if ( typeof sickLeave !== "object" ) 
+    throw new Error("Incorrect sickLeave" );
+
   if (
-    !sickLeave ||
-    typeof sickLeave !== "object" ||
-    !("startDate" in sickLeave) ||
-    !("endDate" in sickLeave)
+    "startDate" in sickLeave &&
+    isString(sickLeave.startDate) &&
+    "endDate" in sickLeave &&
+    isString(sickLeave.endDate)
   ) {
-    throw new Error("Incorrect sickLeave: " + sickLeave);
-  }
-  return {
-    startDate: parseDate(sickLeave.startDate),
-    endDate: parseDate(sickLeave.endDate)
-  };
+    if (sickLeave.startDate.length === 0 && sickLeave.endDate.length === 0)
+      return undefined;
+    else if ((sickLeave.startDate.length === 0) !== (sickLeave.endDate.length === 0))
+      throw new Error("Both sick leave dates need to be filled" );
+    else
+      return {
+        startDate: parseDate(sickLeave.startDate),
+        endDate: parseDate(sickLeave.endDate)
+      };
+    }
+  throw new Error("Incorrect sickLeave" );
 };
 const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> =>  {
   if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
@@ -143,7 +185,6 @@ const toNewEntry = (body: unknown): EntryWithoutId => {
     throw new Error("Incorrect or missing data");
   }
 
-  console.log("salut");
   let newTypeEntry;
   if ("type" in body) {
     switch(body.type) {
@@ -169,7 +210,7 @@ const toNewEntry = (body: unknown): EntryWithoutId => {
         if ("employerName" in body) {
           newTypeEntry = {
             type: body.type,
-            employerName: parseName(body.employerName),
+            employerName: parseEmployerName(body.employerName),
           };
           if ("sickLeave" in body) {
             newTypeEntry = {
@@ -191,7 +232,7 @@ const toNewEntry = (body: unknown): EntryWithoutId => {
       let newEntry: EntryWithoutId = {
         description: parseDescription(body.description),
         date: parseDate(body.date),
-        specialist: parseName(body.specialist),
+        specialist: parseSpecialist(body.specialist),
         ...newTypeEntry
       };
       if ("diagnosisCodes" in body) {
